@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+#    url: jdbc:${CLEARDB_DATABASE_URL:mysql://localhost:3306/forum?serverTimezone=UTC}
+    username: root
+    password: q1w2e3r4ty
+  jpa:
+#    hibernate.ddl-auto: none
+    hibernate.ddl-auto: update
+    show-sql: true
+  flyway:
+#    baselineOnMigrate: false
+    baselineOnMigrate: true
+
+server:
+  port: ${PORT:8080}
+
+blog:
+  title: DevPub
+  subtitle: Рассказы разработчиков
+  phone: +7 222-322-22-32
+  email: goole@yandex.ru
+  copyright: Sergey Filippov
+  copyrightFrom: 2021
+
+
+#spring.datasource.url: jdbc:mysql://localhost:3306/blog?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+#spring.datasource.url: jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+#spring.datasource.username: root
+#spring.datasource.password: q1w2e3r4ty
+#spring.jpa.hibernate.ddl-auto: update
+#spring.jpa.show-sql=true
+#spring.flyway.baselineOnMigrate=true
