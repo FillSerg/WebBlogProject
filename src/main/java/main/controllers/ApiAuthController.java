@@ -1,7 +1,7 @@
 package main.controllers;
 
-//import main.api.response.LoginResponse;
-//import main.api.response.SettingsResponse;
+import main.api.response.LoginResponse;
+import main.api.response.SettingsResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,11 +18,11 @@ public class ApiAuthController {
         return new ResponseEntity<>("/api/auth/", HttpStatus.OK);
     }
 
-    /*@GetMapping(value = "/check")
+    @GetMapping(value = "/check")
     public ResponseEntity<LoginResponse> check() {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setResult(false);
         return ResponseEntity.ok(loginResponse);
-    }*/
+    }
 
 }

@@ -10,7 +10,7 @@ public class PostResponse {
     private List<Post> posts;
 
     public PostResponse() {
-        count = (long) 0;
+        count = 0L;
         posts = new ArrayList<>();
     }
 

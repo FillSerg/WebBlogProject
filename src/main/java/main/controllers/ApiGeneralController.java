@@ -1,10 +1,10 @@
 package main.controllers;
 
-/*import main.api.response.InitResponse;
+import main.api.response.InitResponse;
 import main.api.response.SettingsResponse;
 import main.api.response.TagResponse;
 import main.service.SettingsService;
-import main.service.TagService;*/
+import main.service.TagService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,16 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api")
 public class ApiGeneralController {
 
-    @GetMapping("")
-    ResponseEntity<String> getAuth() {
-        return new ResponseEntity<>("/api/", HttpStatus.OK);
-    }
-
-   /* private final InitResponse initResponse;
+    private final InitResponse initResponse;
     private final SettingsService settingsService;
-    private final TagService tagService;*/
+    private final TagService tagService;
 
-/*    public ApiGeneralController(InitResponse initResponse, SettingsService settingsService, TagService tagService) {
+    public ApiGeneralController(InitResponse initResponse, SettingsService settingsService, TagService tagService) {
         this.initResponse = initResponse;
         this.settingsService = settingsService;
         this.tagService = tagService;
@@ -41,10 +36,6 @@ public class ApiGeneralController {
         return initResponse;
     }
 
-    *//*  @GetMapping("api/settings")
-      public SettingsResponse settings() {
-          return settingsService.getGlobalSettings();
-      }*//*
     @GetMapping("/settings")
     public ResponseEntity<SettingsResponse> settings() {
         return ResponseEntity.ok(settingsService.getGlobalSettings());
@@ -53,5 +44,5 @@ public class ApiGeneralController {
     @GetMapping("/tag")
     public ResponseEntity<TagResponse> getTags(@RequestParam(name = "query", required = false) String query) {
         return tagService.tag(query);
-    }*/
+    }
 }
