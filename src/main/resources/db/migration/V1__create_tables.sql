@@ -9,7 +9,7 @@ drop table if exists users;
 
 create table captcha_codes
 (
-    id          integer      not null,
+    id          integer      not null auto_increment,
     code        varchar(255) not null,
     secret_code varchar(255) not null,
     time        datetime(6) not null,
@@ -17,7 +17,7 @@ create table captcha_codes
 );
 create table global_settings
 (
-    id    integer      not null,
+    id    integer      not null auto_increment,
     code  varchar(255) not null,
     name  varchar(255) not null,
     value varchar(255) not null,
@@ -25,7 +25,7 @@ create table global_settings
 );
 create table post_comments
 (
-    id        integer      not null,
+    id        integer      not null auto_increment,
     text      varchar(255) not null,
     time      datetime(6) not null,
     parent_id integer,
@@ -38,7 +38,7 @@ create table post_comments
 );
 create table post_votes
 (
-    id      integer not null,
+    id      integer not null auto_increment,
     time    datetime(6) not null,
     value   tinyint not null,
     post_id integer not null,
@@ -49,7 +49,7 @@ create table post_votes
 );
 create table posts
 (
-    id                integer      not null,
+    id                integer      not null auto_increment,
     is_active         tinyint      not null,
     moderation_status enum('NEW','ACCEPTED','DECLINED') default 'NEW' not null,
     text              varchar(255) not null,
@@ -64,13 +64,13 @@ create table posts
 );
 create table tags
 (
-    id   integer      not null,
+    id   integer      not null auto_increment,
     name varchar(255) not null,
     primary key (id)
 );
 create table tags2posts
 (
-    id      integer not null,
+    id      integer not null auto_increment,
     post_id integer not null,
     tag_id  integer not null,
     primary key (id)
@@ -79,7 +79,7 @@ create table tags2posts
 );
 create table users
 (
-    id           integer      not null,
+    id           integer      not null auto_increment,
     code         varchar(255),
     email        varchar(255) not null,
     is_moderator tinyint      not null,

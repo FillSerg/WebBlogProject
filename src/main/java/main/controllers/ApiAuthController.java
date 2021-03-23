@@ -14,8 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/auth")
 public class ApiAuthController {
     @GetMapping("")
+//    ResponseEntity<String> getAuth() {
+//        return new ResponseEntity<>("/api/auth/", HttpStatus.OK);
+//    }
     ResponseEntity<String> getAuth() {
-        return new ResponseEntity<>("/api/auth/", HttpStatus.OK);
+        return ResponseEntity.ok()
+                .header("Custom-Header", "foo")
+                .body("Custom header set");
     }
 
     @GetMapping(value = "/check")

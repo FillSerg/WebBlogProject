@@ -52,4 +52,44 @@ public class Post {
 
     @OneToMany(targetEntity = PostComment.class, mappedBy = "postId")
     private List<PostComment> postCommentList;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Post post = (Post) o;
+
+        if (id != post.id) return false;
+        if (isActive != post.isActive) return false;
+        if (viewCount != post.viewCount) return false;
+        if (moderationStatus != post.moderationStatus) return false;
+        if (moderator != null ? !moderator.equals(post.moderator) : post.moderator != null) return false;
+        if (user != null ? !user.equals(post.user) : post.user != null) return false;
+        if (time != null ? !time.equals(post.time) : post.time != null) return false;
+        if (title != null ? !title.equals(post.title) : post.title != null) return false;
+        if (text != null ? !text.equals(post.text) : post.text != null) return false;
+        if (postVoteList != null ? !postVoteList.equals(post.postVoteList) : post.postVoteList != null) return false;
+        if (tags2PostsList != null ? !tags2PostsList.equals(post.tags2PostsList) : post.tags2PostsList != null)
+            return false;
+        return postCommentList != null ? postCommentList.equals(post.postCommentList) : post.postCommentList == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (int) isActive;
+        result = 31 * result + (moderationStatus != null ? moderationStatus.hashCode() : 0);
+        result = 31 * result + (moderator != null ? moderator.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (time != null ? time.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + viewCount;
+        result = 31 * result + (postVoteList != null ? postVoteList.hashCode() : 0);
+        result = 31 * result + (tags2PostsList != null ? tags2PostsList.hashCode() : 0);
+        result = 31 * result + (postCommentList != null ? postCommentList.hashCode() : 0);
+        return result;
+    }
 }
