@@ -1,6 +1,9 @@
 package main.repository;
 
 import main.models.Post;
+import main.models.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,16 +16,23 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Integer>{
 
     @Query("select post from Post post ORDER BY post.time")
-    List<Post> sortAllWithTime();
+    Page<Post> sortAllWithTime(Pageable pageable);
 
     @Query("select post from Post post ORDER BY post.time DESC")
-    List<Post> reversedAllWithTime();
+    Page<Post> reversedAllWithTime(Pageable pageable);
 
-    @Query("select post from Post post ORDER BY post.postCommentList.size")
-    List<Post> sortAllWithPostCommentList();
+    @Query("select post from Post post ORDER BY post.postCommentList.size DESC")
+    Page<Post> sortAllWithPostCommentList(Pageable pageable);
 
-    @Query("select post from Post post ORDER BY post.postVoteList.size")
-    List<Post> sortAllWithPostLike();
+    @Query("select post from Post post ORDER BY post.postVoteList.size DESC")
+    Page<Post> sortAllWithPostLike(Pageable pageable);
+
+    Page<Post>findByTextContains(Pageable pageable, @Param("query") String query);
+
+    @Query(value = "select post from Post post where post.text LIKE %:query% OR post.title LIKE %:query%")
+    Page<Post> findByTextAndTitlePost(Pageable pageable, @Param("query") String query);
+
+//    text,title
 }
 
 

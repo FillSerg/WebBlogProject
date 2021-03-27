@@ -35,39 +35,37 @@ public class PostService {
         Page<Post> posts;
         int page = getPageByOffsetAndLimit(limit, offset);
         PostResponse postResponse = new PostResponse();
-        List<Post>postList = new ArrayList<>();
         switch (mode) {
             case "early":
-                sortedByMode = PageRequest.of(page, limit, Sort.by("time").ascending());
-                postList = postRepository.sortAllWithTime();
+//                sortedByMode = PageRequest.of(page, limit, Sort.by("time").ascending());
+                sortedByMode = PageRequest.of(page, limit);
+                posts = postRepository.sortAllWithTime(sortedByMode);
                 break;
             case "popular":
                 sortedByMode = PageRequest.of(page, limit);
-                postList = postRepository.sortAllWithPostCommentList();
+                posts = postRepository.sortAllWithPostCommentList(sortedByMode);
                 break;
             case "best":
                 sortedByMode = PageRequest.of(page, limit);
-                postList = postRepository.sortAllWithPostLike();
+                posts = postRepository.sortAllWithPostLike(sortedByMode);
                 break;
-            //RECENT
             default:
-                sortedByMode = PageRequest.of(page, limit, Sort.by("time").descending());
-                postList = postRepository.reversedAllWithTime();
+                sortedByMode = PageRequest.of(page, limit);
+                posts = postRepository.reversedAllWithTime(sortedByMode);
                 break;
         }
 //        postResponse.setPosts(postRepository.findAll());
 //        postResponse.setCount(postResponse.getPosts().size());
-//        System.out.println(postResponse.getPosts().size() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        postResponse = convertToPostResponse(postList);
+        postResponse = convertToPostResponse(posts);
         return ResponseEntity.ok(postResponse);
     }
 
     /**
-     * конвертируем List<Post> postList -> postResponse
+     * конвертируем List<Post> postList -> postForResponse
      */
-    private PostResponse convertToPostResponse(List<Post> postList) {
+    private PostResponse convertToPostResponse(Page<Post> postList) {
         List<PostForResponse> listPosts = new ArrayList<>();
-        postList.forEach(post -> {
+        postList.get().forEach(post -> {
             Votes votes = postVoteRepository.getVotes(post.getId());
             UserResponse userResponse = new UserResponse(
                     post.getUser().getId(),
@@ -84,17 +82,32 @@ public class PostService {
             );
         });
         PostResponse postResponse = new PostResponse();
-        postResponse.setCount(postList.size());
+        postResponse.setCount(postList.getTotalElements());
         postResponse.setPosts(listPosts);
         return postResponse;
     }
 
     /**
-     * Вспомогательный метод расчёта страницы.
+     * Расчёт страницы.
      */
-    private int getPageByOffsetAndLimit(int limit,
-                                        int offset) {
+    private int getPageByOffsetAndLimit(int limit, int offset) {
         return offset / limit;
+    }
+
+    public ResponseEntity<PostResponse> searchPosts(int limit, int offset, String query) {
+        Pageable sortedByMode;
+        int page = getPageByOffsetAndLimit(limit, offset);
+        PostResponse postResponse = new PostResponse();
+        sortedByMode = PageRequest.of(page, limit, Sort.by("time").ascending());
+        Page<Post> postPage;
+        if (query == null || query.isEmpty()) {
+            return posts(0,10,"recent");
+//            postPage = postRepository.findAll(sortedByMode);
+        } else {
+            postPage = postRepository.findByTextAndTitlePost(sortedByMode, query);
+        }
+        postResponse = convertToPostResponse(postPage);
+        return ResponseEntity.ok(postResponse);
     }
 
     /*public ResponseEntity<PostResponse> posts(int limit, int offset, String mode) {

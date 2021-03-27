@@ -23,24 +23,22 @@ public class ApiPostController {
     }
 
     @GetMapping("")
-    /*@ResponseBody*/
-    public /*List<Post>*/ ResponseEntity<PostResponse> getPosts(
+    public ResponseEntity<PostResponse> getPosts(
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "mode", required = false, defaultValue = "recent") String mode) {
 
-       /* PostResponse postResponse = new PostResponse();
-        postResponse.setPosts(postRepository.findAll());
-        System.out.println(postResponse.getPosts());
-        postResponse.setCount(postResponse.getPosts().size());
-        return ResponseEntity.ok(postResponse);*/
-//        return postRepository.findAll();
         return postService.posts(limit, offset, mode);
     }
 
-    /*@GetMapping("")
-    ResponseEntity<PostResponse> getPost() {
-        return ResponseEntity.ok(new PostResponse());
-    }*/
+    @GetMapping("/search")
+    public ResponseEntity<PostResponse> searchPosts(
+            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+            @RequestParam(name = "query", required = false) String query) {
+
+        return postService.searchPosts(limit, offset, query);
+    }
+
 
 }

@@ -10,19 +10,19 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class PostResponse {
-    private int count;
+    private Long count;
     private List<PostForResponse> posts;
 
     public PostResponse() {
-        count = 0;
+        count = 0L;
         posts = new ArrayList<>();
     }
 
-    public int getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 

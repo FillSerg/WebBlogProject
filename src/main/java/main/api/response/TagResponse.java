@@ -6,16 +6,16 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-/*@Data
-@AllArgsConstructor*/
+@Data
+@AllArgsConstructor
 public class TagResponse {
-    private List<innerTag> tags;
+    private List<InnerTag> tags;
 
-    public class innerTag {
+    public class InnerTag {
         private String name;
         private double weight;
 
-        public innerTag(String name, double weight) {
+        public InnerTag(String name, double weight) {
             this.name = name;
             this.weight = weight;
         }
@@ -41,11 +41,11 @@ public class TagResponse {
         tags = new ArrayList<>();
     }
 
-    public List<innerTag> getTags() {
+    public List<InnerTag> getTags() {
         return tags;
     }
 
-    public void setTags(List<innerTag> tags) {
+    public void setTags(List<InnerTag> tags) {
         this.tags = tags;
     }
 }

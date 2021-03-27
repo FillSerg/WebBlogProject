@@ -19,4 +19,9 @@ public class DefaultController {
     public String webMethod(Model model) {
         return "index";
     }
+
+    @GetMapping(value = "/**/{path:[^\\\\.]*}")
+    public String redirectToIndex() {
+        return "forward:/"; //делаем перенаправление
+    }
 }
