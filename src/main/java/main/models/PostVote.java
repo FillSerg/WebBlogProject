@@ -10,14 +10,14 @@ import java.util.Date;
 @Data
 public class PostVote {
 
-  /*  @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;*/
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+
+   /* @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="EMP_SEQ")
     @SequenceGenerator(name="EMP_SEQ", sequenceName="EMP_SEQ", allocationSize=100)
-    private int id;
+    private int id;*/
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

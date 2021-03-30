@@ -35,9 +35,24 @@ public class ApiPostController {
     public ResponseEntity<PostResponse> searchPosts(
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
-            @RequestParam(name = "query", required = false) String query) {
-
+            @RequestParam(name = "query", required = false, defaultValue = "") String query) {
         return postService.searchPosts(limit, offset, query);
+    }
+
+    @GetMapping("/byDate")
+    public ResponseEntity<PostResponse> getPostsByDate(
+            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+            @RequestParam(name = "date" , required = false) String date) {
+        return postService.postsByDate(limit, offset, date);
+    }
+
+    @GetMapping("/byTag")
+    public ResponseEntity<PostResponse> getPostsByTag(
+            @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
+            @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
+            @RequestParam(name = "tag", defaultValue = "") String tag) {
+        return postService.postsByTag(limit, offset, tag);
     }
 
 

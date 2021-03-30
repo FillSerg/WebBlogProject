@@ -16,6 +16,6 @@ public interface PostVoteRepository extends JpaRepository<PostVote, Integer> {
             + " (select count(*) from post_votes pv "
             + "where pv.post_id = :postId and pv.value = -1) as dislikes from dual",
             nativeQuery = true)
-    Votes getVotes(Integer postId);
+    Votes getVotes(int postId);
 
     Optional<PostVote> findByPostIdAndUserId(int postId, int userId);}

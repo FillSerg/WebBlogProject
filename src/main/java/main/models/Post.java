@@ -92,4 +92,22 @@ public class Post {
         result = 31 * result + (postCommentList != null ? postCommentList.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", isActive=" + isActive +
+                ", moderationStatus=" + moderationStatus +
+                ", moderator=" + moderator +
+                ", user=" + user +
+                ", time=" + time +
+                ", title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                ", viewCount=" + viewCount +
+                ", postVoteList=" + postVoteList +
+                ", tags2PostsList=" + tags2PostsList +
+                ", postCommentList=" + postCommentList +
+                '}';
+    }
 }
