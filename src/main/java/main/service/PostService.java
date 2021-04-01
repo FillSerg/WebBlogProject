@@ -1,12 +1,11 @@
 package main.service;
 
-import main.api.response.PostForResponse;
-import main.api.response.PostResponse;
-import main.api.response.UserResponse;
+import main.api.response.*;
 import main.enums.ModerationStatus;
 import main.models.Post;
 import main.models.Tag;
 import main.models.Tags2Posts;
+import main.models.User;
 import main.repository.PostRepository;
 import main.repository.PostVoteRepository;
 import main.repository.TagRepository;
@@ -55,7 +54,8 @@ public class PostService {
                 posts = postRepository.sortAllWithPostLike(sortedByMode);
                 break;
             default:
-                sortedByMode = PageRequest.of(page, limit);
+                sortedByMode = PageRequest.of(page, limit, Sort.by("time").ascending());
+//                sortedByMode = PageRequest.of(page, limit);
                 posts = postRepository.reversedAllWithTime(sortedByMode);
                 break;
         }
@@ -66,27 +66,26 @@ public class PostService {
 
     /**
      * конвертируем List<Post> postList -> postForResponse +
-     * фильтр (post.getIsActive() == 1 && post.getModerationStatus() ==
+     * фильтр (post.getIsActive() == 1 && post.getModerationStatus() == ACCEPTED Удалить
      */
     private PostResponse convertToPostResponse(Page<Post> postList) {
         List<PostForResponse> listPosts = new ArrayList<>();
-        postList.get().filter(post -> (post.getIsActive() == 1 && post.getModerationStatus() == ModerationStatus.ACCEPTED))
-                .forEach(post -> {
-                    Votes votes = postVoteRepository.getVotes(post.getId());
-                    UserResponse userResponse = new UserResponse(
-                            post.getUser().getId(),
-                            post.getUser().getName());
-                    listPosts.add(new PostForResponse(post.getId(),
-                            post.getTime().getTime() / 1_000L,
-                            userResponse,
-                            post.getTitle(),
-                            post.getText(),
-                            votes.getLikes(),
-                            votes.getDislikes(),
-                            post.getPostCommentList().size(),
-                            post.getViewCount())
-                    );
-                });
+        postList.get().forEach(post -> {
+            Votes votes = postVoteRepository.getVotes(post.getId());
+            UserResponse userResponse = new UserResponse(
+                    post.getUser().getId(),
+                    post.getUser().getName());
+            listPosts.add(new PostForResponse(post.getId(),
+                    post.getTime().getTime() / 1_000L,
+                    userResponse,
+                    post.getTitle(),
+                    post.getText(),
+                    votes.getLikes(),
+                    votes.getDislikes(),
+                    post.getPostCommentList().size(),
+                    post.getViewCount())
+            );
+        });
         PostResponse postResponse = new PostResponse();
         postResponse.setCount(postList.getTotalElements());
         postResponse.setPosts(listPosts);
@@ -119,9 +118,7 @@ public class PostService {
 
     public ResponseEntity<PostResponse> postsByDate(int limit, int offset, String date) {
         Pageable sortedByMode = PageRequest.of(
-                getPageByOffsetAndLimit(limit, offset),
-                limit,
-                Sort.by("time").descending());
+                getPageByOffsetAndLimit(limit, offset), limit, Sort.by("time").descending());
 //        2019-10-15
         Date beforeData = new Date();
         try {
@@ -136,21 +133,10 @@ public class PostService {
         return ResponseEntity.ok(postResponse);
     }
 
-    /*private Page<Post> filter(Page<Post> postPage){
-        postPage.stream()*//*.filter(Objects::nonNull)*//*
-                .filter(post -> (post.getIsActive() == 1 && post.getModerationStatus() == ModerationStatus.ACCEPTED)).
-                        forEach(System.out::println);
-                        *//*collect(Collectors.toList());*//*
-
-        return postPage;
-    }*/
-
     //Сортровка по time не работает
     public ResponseEntity<PostResponse> postsByTag(int limit, int offset, String tag) {
         Pageable sortedByMode = PageRequest.of(
-                getPageByOffsetAndLimit(limit, offset),
-                limit,
-                Sort.by("time").ascending());
+                getPageByOffsetAndLimit(limit, offset), limit, Sort.by("time").ascending());
         Tag findTag = tagRepository.findTagByName(tag);
         if (findTag == null) {
             return ResponseEntity.ok(new PostResponse());
@@ -158,6 +144,7 @@ public class PostService {
         List<Post> postList = findTag.getTags2PostsList()
                 .stream()
                 .map(Tags2Posts::getPostId)
+                .filter(post -> (post.getIsActive() == 1 && post.getModerationStatus() == ModerationStatus.ACCEPTED))
                 .collect(Collectors.toList());
         if (postList.isEmpty()) {
             return ResponseEntity.ok(new PostResponse());
@@ -166,5 +153,57 @@ public class PostService {
         PostResponse postResponse = convertToPostResponse(postPage);
         return ResponseEntity.ok(postResponse);
     }
+
+    public ResponseEntity<PostByIdResponse> postById(int id) {
+        Post post = postRepository.findById(id);
+        UserResponse userResponse = new UserResponse(
+                post.getUser().getId(),
+                post.getUser().getName());
+
+        Votes votes = postVoteRepository.getVotes(post.getId());
+        List<CommentResponse> commentList = getCommentResponseList(post);
+        Set<String> tagNameSet = post.getTags2PostsList().stream()
+                .map(Tags2Posts::getTagId).map(Tag::getName)
+                .collect(Collectors.toSet());
+
+        PostByIdResponse postByIdResponse = new PostByIdResponse(
+                post.getId(),
+                post.getTime().getTime() / 1_000L,
+                post.getIsActive() == 1,
+                userResponse,
+                post.getTitle(),
+                post.getText(),
+                votes.getLikes(),
+                votes.getDislikes(),
+                post.getViewCount(),
+                commentList,
+                tagNameSet);
+        //Доделать увеличичение кол-во просмотров на 1 по условию
+        if (isIncrementViewCount(post.getUser())) {
+            post.setViewCount(post.getViewCount() + 1);
+            postRepository.save(post);
+        }
+        return ResponseEntity.ok(postByIdResponse);
+    }
+
+    private boolean isIncrementViewCount(User user) {
+        boolean isIncrementViewCount = false;
+        //
+        return isIncrementViewCount;
+    }
+
+    private List<CommentResponse> getCommentResponseList(Post post) {
+        return post.getPostCommentList().stream()
+                .map(p -> new CommentResponse(
+                        p.getId(),
+                        p.getTime().getTime() / 1_000L,
+                        p.getText(),
+                        new CommentUserResponse(
+                                p.getUser().getId(),
+                                p.getUser().getName(),
+                                p.getUser().getPhoto())))
+                .collect(Collectors.toList());
+    }
+
 
 }

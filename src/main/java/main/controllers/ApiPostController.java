@@ -1,5 +1,6 @@
 package main.controllers;
 
+import main.api.response.PostByIdResponse;
 import main.api.response.PostResponse;
 import main.models.Post;
 import main.repository.PostRepository;
@@ -53,6 +54,11 @@ public class ApiPostController {
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
             @RequestParam(name = "tag", defaultValue = "") String tag) {
         return postService.postsByTag(limit, offset, tag);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostByIdResponse> getPostById(@PathVariable int id) {
+        return postService.postById(id);
     }
 
 

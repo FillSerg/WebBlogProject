@@ -5,8 +5,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CommentUserResponse {
+public class CommentResponse {
     private int id;
-    private String name;
-    private String photo;
+    private long timestamp;
+    private String text;
+    private CommentUserResponse user;
 }
+
