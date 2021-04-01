@@ -5,23 +5,20 @@ import main.api.response.PostResponse;
 import main.api.response.UserResponse;
 import main.enums.ModerationStatus;
 import main.models.Post;
+import main.models.Tag;
+import main.models.Tags2Posts;
 import main.repository.PostRepository;
 import main.repository.PostVoteRepository;
+import main.repository.TagRepository;
 import main.repository.Votes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
 
-import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,11 +26,13 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final PostVoteRepository postVoteRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, PostVoteRepository postVoteRepository) {
+    public PostService(PostRepository postRepository, PostVoteRepository postVoteRepository, TagRepository tagRepository) {
         this.postRepository = postRepository;
         this.postVoteRepository = postVoteRepository;
+        this.tagRepository = tagRepository;
     }
 
     public ResponseEntity<PostResponse> posts(int limit, int offset, String mode) {
@@ -73,21 +72,21 @@ public class PostService {
         List<PostForResponse> listPosts = new ArrayList<>();
         postList.get().filter(post -> (post.getIsActive() == 1 && post.getModerationStatus() == ModerationStatus.ACCEPTED))
                 .forEach(post -> {
-            Votes votes = postVoteRepository.getVotes(post.getId());
-            UserResponse userResponse = new UserResponse(
-                    post.getUser().getId(),
-                    post.getUser().getName());
-            listPosts.add(new PostForResponse(post.getId(),
-                    post.getTime().getTime() / 1_000L,
-                    userResponse,
-                    post.getTitle(),
-                    post.getText(),
-                    votes.getLikes(),
-                    votes.getDislikes(),
-                    post.getPostCommentList().size(),
-                    post.getViewCount())
-            );
-        });
+                    Votes votes = postVoteRepository.getVotes(post.getId());
+                    UserResponse userResponse = new UserResponse(
+                            post.getUser().getId(),
+                            post.getUser().getName());
+                    listPosts.add(new PostForResponse(post.getId(),
+                            post.getTime().getTime() / 1_000L,
+                            userResponse,
+                            post.getTitle(),
+                            post.getText(),
+                            votes.getLikes(),
+                            votes.getDislikes(),
+                            post.getPostCommentList().size(),
+                            post.getViewCount())
+                    );
+                });
         PostResponse postResponse = new PostResponse();
         postResponse.setCount(postList.getTotalElements());
         postResponse.setPosts(listPosts);
@@ -109,7 +108,7 @@ public class PostService {
         sortedByMode = PageRequest.of(page, limit, Sort.by("time").ascending());
         Page<Post> postPage;
         if (query == null || query.isEmpty()) {
-            return posts(0,10,"recent");
+            return posts(0, 10, "recent");
 //          postPage = postRepository.findAll(sortedByMode);
         } else {
             postPage = postRepository.findByTextAndTitlePost(sortedByMode, query);
@@ -146,11 +145,26 @@ public class PostService {
         return postPage;
     }*/
 
+    //Сортровка по time не работает
     public ResponseEntity<PostResponse> postsByTag(int limit, int offset, String tag) {
-
-        //удалить
-        return ResponseEntity.ok(new PostResponse());
+        Pageable sortedByMode = PageRequest.of(
+                getPageByOffsetAndLimit(limit, offset),
+                limit,
+                Sort.by("time").ascending());
+        Tag findTag = tagRepository.findTagByName(tag);
+        if (findTag == null) {
+            return ResponseEntity.ok(new PostResponse());
+        }
+        List<Post> postList = findTag.getTags2PostsList()
+                .stream()
+                .map(Tags2Posts::getPostId)
+                .collect(Collectors.toList());
+        if (postList.isEmpty()) {
+            return ResponseEntity.ok(new PostResponse());
+        }
+        Page<Post> postPage = new PageImpl<>(postList, sortedByMode, postList.size());
+        PostResponse postResponse = convertToPostResponse(postPage);
+        return ResponseEntity.ok(postResponse);
     }
-
 
 }

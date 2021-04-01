@@ -19,4 +19,14 @@ public class Tags2Posts {
     @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false)
     private main.models.Tag tagId;
+
+
+    @Override
+    public String toString() {
+        return "Tags2Posts{" +
+                "id=" + id +
+//                ", postId=" + postId +
+//                ", tagId=" + tagId +
+                '}';
+    }
 }

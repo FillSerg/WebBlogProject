@@ -1,8 +1,5 @@
 package main.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import main.api.response.CalendarResponse;
 import main.models.Post;
 import main.repository.PostRepository;
@@ -22,7 +19,8 @@ public class CalendarService {
         this.postRepository = postRepository;
     }
 
-    public ResponseEntity<CalendarResponse> calendar(int year) {
+    public ResponseEntity<CalendarResponse> calendar(String year) {
+        year = year.trim();
         CalendarResponse calendarResponse = new CalendarResponse();
         List<Post> postList = postRepository.sortAllWithTimeToList();
         Map<String, TreeMap<String, Integer>> mapYears = new TreeMap<>();
@@ -33,7 +31,7 @@ public class CalendarService {
             String yearSt = yearFormat.format(post.getTime());
             String dateSt = dateFormat.format(post.getTime());
             if (mapYears.isEmpty() || !mapYears.containsKey(yearSt)) {
-                mapYears.put(yearSt, new TreeMap<String, Integer>() {{
+                mapYears.put(yearSt, new TreeMap<>() {{
                     put(dateSt, 1);
                 }});
             } else {
@@ -43,10 +41,9 @@ public class CalendarService {
         if (!mapYears.isEmpty()) {
             List<String> years = new ArrayList<>(mapYears.keySet());
             Collections.sort(years);
-            System.out.println(year);
             calendarResponse.setYears(years);
-            if (years.contains(Integer.toString(year))) {
-                calendarResponse.setPosts(mapYears.get(Integer.toString(year)));
+            if (years.contains(year)) {
+                calendarResponse.setPosts(mapYears.get(year));
             } else {
                 calendarResponse.setPosts(mapYears.get(years.get(years.size() - 1)));
             }

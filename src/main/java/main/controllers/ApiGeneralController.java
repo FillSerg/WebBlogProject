@@ -52,7 +52,7 @@ public class ApiGeneralController {
 
     @GetMapping("/calendar")
     public ResponseEntity<CalendarResponse> getCalendar(
-            @RequestParam(name = "year", required = false, defaultValue = "0") int year) {
+            @RequestParam(name = "year", required = false, defaultValue = "0") String year) {
         return calendarService.calendar(year);
     }
 }

@@ -19,4 +19,14 @@ public class Tag {
 
     @OneToMany(mappedBy = "tagId")
     private List<Tags2Posts> tags2PostsList;
+
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", tags2PostsList=" + tags2PostsList +
+                '}';
+    }
 }

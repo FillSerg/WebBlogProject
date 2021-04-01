@@ -46,6 +46,7 @@ public class TagService {
         for (Tag tag : tagList
         ) {
             mapCountTag.put(tag.getName(), tag.getTags2PostsList().size());
+//            System.out.println(tag.getTags2PostsList());
             totalLength = totalLength + tag.getTags2PostsList().size();
             if (tag.getTags2PostsList().size() > maxLength) {
                 maxLength = tag.getTags2PostsList().size();

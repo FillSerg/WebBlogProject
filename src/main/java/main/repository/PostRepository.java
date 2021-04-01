@@ -2,6 +2,7 @@ package main.repository;
 
 import main.models.Post;
 import main.models.Tag;
+import main.models.Tags2Posts;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -43,6 +44,8 @@ public interface PostRepository extends JpaRepository<Post, Integer>{
     //посты за определеную дату используется
     @Query("select post from Post post where post.time >= :beforeData and post.time < :afterDate")
     Page<Post> findAllByDate(Pageable sortedByMode, Date beforeData, Date afterDate);
+
+//    List<Tags2Posts>findPostByTags2PostsList(Tag tag);
 
 
 //    text,title
