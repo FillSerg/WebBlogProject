@@ -1,0 +1,19 @@
+package main.repository;
+
+import main.models.CaptchaCode;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+
+@Repository
+public interface CaptchaCodesRepository extends JpaRepository<CaptchaCode, Integer> {
+    int countByCodeAndSecretCode(String code, String secretCode);
+
+    @Modifying
+    @Query(value = "delete from captcha_codes where DATE(captcha_codes.time) < :deleteDate",
+            nativeQuery = true)
+    void deleteOldCaptcha(Date deleteDate);
+}

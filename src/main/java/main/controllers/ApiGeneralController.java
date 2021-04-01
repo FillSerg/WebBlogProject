@@ -7,6 +7,7 @@ import main.api.response.TagResponse;
 import main.service.CalendarService;
 import main.service.SettingsService;
 import main.service.TagService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ public class ApiGeneralController {
     private final TagService tagService;
     private final CalendarService calendarService;
 
+    @Autowired
     public ApiGeneralController(InitResponse initResponse, SettingsService settingsService, TagService tagService, CalendarService calendarService) {
         this.initResponse = initResponse;
         this.settingsService = settingsService;

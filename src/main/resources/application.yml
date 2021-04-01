@@ -23,6 +23,30 @@ blog:
   copyright: Sergey Filippov
   copyrightFrom: 2021
 
+captcha:
+  delete:
+    hours: 1
+  length: 4
+  width: 100
+  height: 35
+  secretCode:
+    length: 35
+
+password:
+  min:
+    length: 6
+  restore:
+    code:
+      length: 20
+
+file:
+  name:
+    length : 20
+  image:
+  photo:
+    size: 5_000_000
+    width: 36
+    height: 36
 
 #spring.datasource.url: jdbc:mysql://localhost:3306/blog?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
 #spring.datasource.url: jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
