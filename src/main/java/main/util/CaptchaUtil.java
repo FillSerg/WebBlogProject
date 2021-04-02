@@ -1,4 +1,4 @@
-package main.base;
+package main.util;
 
 import com.github.cage.Cage;
 import com.github.cage.IGenerator;

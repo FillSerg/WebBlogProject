@@ -1,8 +1,8 @@
 package main.service;
 
 import main.api.response.AuthCaptchaResponse;
-import main.base.CaptchaUtil;
-import main.base.DateHelper;
+import main.util.CaptchaUtil;
+import main.util.DateHelper;
 import main.models.CaptchaCode;
 import main.repository.CaptchaCodesRepository;
 import main.repository.PostRepository;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AuthService {
@@ -62,21 +63,23 @@ public class AuthService {
         CaptchaCode captchaCodes = new CaptchaCode();
         captchaCodes.setCode(code);
         captchaCodes.setSecretCode(secretCode);
-        captchaCodes.setTime(DateHelper.getCurrentDate().getTime());
-//        deleteOldCaptcha();
-        //Сохраняем новую
-//        captchaCodesRepository.save(captchaCodes);
+        captchaCodes.setTime(new Date());
+        //Удаление < 1 час
+        deleteOldCaptcha();
+        //Сохранение новой
+        captchaCodesRepository.save(captchaCodes);
 //        log.info("Captcha code is: " + code + ". Secret code is: " + secretCode);
         return ResponseEntity.ok(authCaptchaResponse);
-//        return ResponseEntity.ok(new AuthCaptchaResponse());
     }
 
-    private void deleteOldCaptcha() {
-        Calendar calendar = DateHelper.getCurrentDate();
-        calendar.add(Calendar.HOUR, -captchaDeleteHours);
-        Date date = new Date();
-        //Удаляем устаревшие капчи
-//        captchaCodesRepository.deleteOldCaptcha(calendar.getTime());
-        captchaCodesRepository.deleteOldCaptcha(date);
+    private void deleteOldCaptcha() {;
+        Date date = new Date(new Date().getTime() - (long) captchaDeleteHours * 60 * 60 * 1000);
+        List<CaptchaCode> captchaCodes = captchaCodesRepository.findAll();
+        for (CaptchaCode captcha : captchaCodes
+        ) {
+            if (captcha.getTime().before(date)) {
+                captchaCodesRepository.delete(captcha);
+            }
+        }
     }
 }
