@@ -5,69 +5,62 @@ import lombok.EqualsAndHashCode;
 
 
 //@Data
-public class RegisterErrorResponse extends RegisterResponse{
-    private String email;
-    private String name;
-    private String password;
-    private String captcha;
+public class RegisterErrorResponse extends RegisterResponse {
+    public InnerRegisterErrorResponse errors;
 
     public RegisterErrorResponse(boolean result) {
         super(result);
+        this.errors = new InnerRegisterErrorResponse();
     }
 
-    public String getEmail() {
-        return email;
+    public InnerRegisterErrorResponse getErrors() {
+        return errors;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setErrors(InnerRegisterErrorResponse errors) {
+        this.errors = errors;
     }
 
-    public String getName() {
-        return name;
-    }
+    //    @Data
+    public class InnerRegisterErrorResponse {
+        private String email;
+        private String name;
+        private String password;
+        private String captcha;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+        public InnerRegisterErrorResponse() {
+        }
 
-    public String getPassword() {
-        return password;
-    }
+        public String getEmail() {
+            return email;
+        }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+        public void setEmail(String email) {
+            this.email = email;
+        }
 
-    public String getCaptcha() {
-        return captcha;
-    }
+        public String getName() {
+            return name;
+        }
 
-    public void setCaptcha(String captcha) {
-        this.captcha = captcha;
-    }
+        public void setName(String name) {
+            this.name = name;
+        }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        public String getPassword() {
+            return password;
+        }
 
-        RegisterErrorResponse that = (RegisterErrorResponse) o;
+        public void setPassword(String password) {
+            this.password = password;
+        }
 
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        return captcha != null ? captcha.equals(that.captcha) : that.captcha == null;
-    }
+        public String getCaptcha() {
+            return captcha;
+        }
 
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (captcha != null ? captcha.hashCode() : 0);
-        return result;
+        public void setCaptcha(String captcha) {
+            this.captcha = captcha;
+        }
     }
 }
