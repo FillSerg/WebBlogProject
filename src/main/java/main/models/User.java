@@ -44,4 +44,8 @@ public class User {
 
     @OneToMany(targetEntity = PostComment.class, mappedBy = "user")
     private List<PostComment> postCommentList;
+
+    public Role getRole() {
+        return isModerator==1 ? Role.MODERATOR : Role.USER;
+    }
 }

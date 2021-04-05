@@ -19,6 +19,7 @@ public class CalendarService {
         this.postRepository = postRepository;
     }
 
+    //Можно передалать, что бы не забивать в мапу только посты за требуемый год или текуший
     public ResponseEntity<CalendarResponse> calendar(String year) {
         year = year.trim();
         CalendarResponse calendarResponse = new CalendarResponse();

@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Repository
 public interface CaptchaCodesRepository extends JpaRepository<CaptchaCode, Integer> {
-//    int countByCodeAndSecretCode(String code, String secretCode);
+    int countByCodeAndSecretCode(String code, String secretCode);
 
 //    @Transactional
    /* @Modifying

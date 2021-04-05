@@ -1,5 +1,6 @@
 package main.service;
 
+import lombok.extern.slf4j.Slf4j;
 import main.api.response.*;
 import main.enums.ModerationStatus;
 import main.models.Post;
@@ -21,6 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PostService {
 
     private final PostRepository postRepository;
@@ -204,6 +206,4 @@ public class PostService {
                                 p.getUser().getPhoto())))
                 .collect(Collectors.toList());
     }
-
-
 }
