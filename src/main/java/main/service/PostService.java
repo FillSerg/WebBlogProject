@@ -43,7 +43,6 @@ public class PostService {
         PostResponse postResponse = new PostResponse();
         switch (mode) {
             case "early":
-//                sortedByMode = PageRequest.of(page, limit, Sort.by("time").ascending());
                 sortedByMode = PageRequest.of(page, limit);
                 posts = postRepository.sortAllWithTime(sortedByMode);
                 break;
@@ -57,18 +56,15 @@ public class PostService {
                 break;
             default:
                 sortedByMode = PageRequest.of(page, limit, Sort.by("time").ascending());
-//                sortedByMode = PageRequest.of(page, limit);
                 posts = postRepository.reversedAllWithTime(sortedByMode);
                 break;
         }
         postResponse = convertToPostResponse(posts);
-//        filter(posts);
         return ResponseEntity.ok(postResponse);
     }
 
     /**
-     * конвертируем List<Post> postList -> postForResponse +
-     * фильтр (post.getIsActive() == 1 && post.getModerationStatus() == ACCEPTED Удалить
+     * конвертируем List<Post> postList -> postForResponse
      */
     private PostResponse convertToPostResponse(Page<Post> postList) {
         List<PostForResponse> listPosts = new ArrayList<>();
@@ -110,7 +106,6 @@ public class PostService {
         Page<Post> postPage;
         if (query == null || query.isEmpty()) {
             return posts(0, 10, "recent");
-//          postPage = postRepository.findAll(sortedByMode);
         } else {
             postPage = postRepository.findByTextAndTitlePost(sortedByMode, query);
         }

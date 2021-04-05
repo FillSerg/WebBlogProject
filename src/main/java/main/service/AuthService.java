@@ -91,7 +91,7 @@ public class AuthService {
     }
 
     @Transactional
-    public Object register(RegisterRequest registerRequest) {
+    public ResponseEntity<? extends RegisterResponse> register(RegisterRequest registerRequest) {
         RegisterResponse registerResponse = validateRegisterRequest(registerRequest);
 
         if (registerResponse instanceof RegisterErrorResponse) {
@@ -117,33 +117,33 @@ public class AuthService {
         RegisterErrorResponse registerErrorResponse = new RegisterErrorResponse(false);
         boolean isValidate = true;
         if (registerRequest.getEmail().isEmpty() || registerRequest.getEmail() == null) {
-            registerErrorResponse.setEmail("E-mail не может быть пустым");
+            registerErrorResponse.getErrors().setEmail("E-mail не может быть пустым");
             isValidate = false;
         }
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
-            registerErrorResponse.setEmail("Этот e-mail уже зарегистрирован");
+            registerErrorResponse.getErrors().setEmail("Этот e-mail уже зарегистрирован");
             isValidate = false;
         }
         if (registerRequest.getName().isEmpty() || registerRequest.getName() == null) {
-            registerErrorResponse.setName("Имя не может быть пустым");
+            registerErrorResponse.getErrors().setName("Имя не может быть пустым");
             isValidate = false;
         }
         if (registerRequest.getPassword().isEmpty() || registerRequest.getPassword() == null) {
-            registerErrorResponse.setPassword("Пароль не может быть пустым");
+            registerErrorResponse.getErrors().setPassword("Пароль не может быть пустым");
             isValidate = false;
         }
         if (registerRequest.getPassword().length() < passwordMinLength) {
-            registerErrorResponse.setPassword("Пароль не может быть короче 6 символов");
+            registerErrorResponse.getErrors().setPassword("Пароль не может быть короче 6 символов");
             isValidate = false;
         }
         if (registerRequest.getCaptcha().isEmpty() || registerRequest.getCaptcha() == null) {
-            registerErrorResponse.setCaptcha("Код с картинки не может быть пустым");
+            registerErrorResponse.getErrors().setCaptcha("Код с картинки не может быть пустым");
             isValidate = false;
             return registerErrorResponse;
         }
         if (captchaCodesRepository.countByCodeAndSecretCode(registerRequest.getCaptcha(),
                 registerRequest.getCaptchaSecret()) == 0) {
-            registerErrorResponse.setCaptcha("Код с картинки указан не верно");
+            registerErrorResponse.getErrors().setCaptcha("Код с картинки указан не верно");
             isValidate = false;
         }
         if (!isValidate) {
