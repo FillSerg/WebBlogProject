@@ -55,6 +55,5 @@ public class CaptchaUtil {
         code = cage.getTokenGenerator().next();
         secretCode = RandomStringUtils.random(secretCodeLength, true, true);
         imageString = "data:image/png;base64, " + Base64.getEncoder().encodeToString(cage.draw(code));
-//        System.out.println("!!!!!!!!!!!!!!" + imageString);
     }
 }

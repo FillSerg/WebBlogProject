@@ -9,18 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "/api/post")
 public class ApiPostController {
     private final PostService postService;
-    /*private final PostRepository postRepository;*/
 
     @Autowired
-    public ApiPostController(PostService postService/*, PostRepository postRepository*/) {
+    public ApiPostController(PostService postService) {
         this.postService = postService;
-        /*this.postRepository = postRepository;*/
     }
 
     @GetMapping("")
@@ -44,7 +40,7 @@ public class ApiPostController {
     public ResponseEntity<PostResponse> getPostsByDate(
             @RequestParam(name = "limit", required = false, defaultValue = "10") int limit,
             @RequestParam(name = "offset", required = false, defaultValue = "0") int offset,
-            @RequestParam(name = "date" , required = false) String date) {
+            @RequestParam(name = "date", required = false) String date) {
         return postService.postsByDate(limit, offset, date);
     }
 

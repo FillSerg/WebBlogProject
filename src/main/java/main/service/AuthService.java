@@ -101,13 +101,9 @@ public class AuthService {
                 " / " + registerRequest.getCaptcha());
         main.models.User user = new main.models.User();
         user.setIsModerator((byte) 0);
-//            user.setRegTime(DateHelper.getCurrentDate().getTime());
         user.setRegTime(new Date());
         user.setName(registerRequest.getName());
         user.setEmail(registerRequest.getEmail());
-            /*user.setPassword(SecurityConfig
-                    .passwordEncoder()
-                    .encode(registerRequest.getPassword()));*/
         user.setPassword(registerRequest.getPassword());
         user.setCode(registerRequest.getCaptchaSecret());
         userRepository.save(user);
@@ -119,10 +115,6 @@ public class AuthService {
      */
     private <T extends RegisterResponse> RegisterResponse validateRegisterRequest(RegisterRequest registerRequest) {
         RegisterErrorResponse registerErrorResponse = new RegisterErrorResponse(false);
-        //Если регистрация закрыта
-       /* if (!SettingsService.getSettingsValue(globalSettingsRepository, "MULTIUSER_MODE")) {
-            throw new RegistrationClosedException("Register is closed");
-        }*/
         boolean isValidate = true;
         if (registerRequest.getEmail().isEmpty() || registerRequest.getEmail() == null) {
             registerErrorResponse.setEmail("E-mail не может быть пустым");

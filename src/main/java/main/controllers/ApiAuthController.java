@@ -26,11 +26,6 @@ public class ApiAuthController<T> {
     ResponseEntity<String> getAuth() {
         return new ResponseEntity<>("/api/auth/", HttpStatus.OK);
     }
-    /*ResponseEntity<String> getAuth() {
-        return ResponseEntity.ok()
-                .header("Custom-Header", "foo")
-                .body("Custom header set");
-    }*/
 
     @GetMapping(value = "/check")
     public ResponseEntity<LoginResponse> check() {
@@ -45,11 +40,9 @@ public class ApiAuthController<T> {
     }
 
     @PostMapping("/register")
-    public ResponseEntity <? extends RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<? extends RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {
         return (ResponseEntity<? extends RegisterResponse>) authService.register(registerRequest);
     }
-
-
 
 
 }
