@@ -67,6 +67,26 @@ insert into posts(id, is_active, moderation_status, moderator_id, user_id, time,
 VALUES(15,  1, 'ACCEPTED', 1, 7, '2020-12-16 23:11:17', 'Профессия‌ ‌Data‌ ‌Scientist‌', 'Вы станете специалистом по анализу данных, алгоритмам машинного обучения и нейросетям, сможете построить карьеру в крупной технологической компании — в России или за рубежом.!', 6);
 
 
+insert into posts(id, is_active, moderation_status, moderator_id, user_id, time, title, text, view_count)
+VALUES(16,  1, 'ACCEPTED', 1, 1, '2021-01-16 12:11:17', 'Профессия', 'алгоритмам  карьеру', 0);
+
+insert into posts(id, is_active, moderation_status, moderator_id, user_id, time, title, text, view_count)
+VALUES(17,  1, 'ACCEPTED', 1, 5, '2021-01-16 13:11:17', 'Scientist', 'Кроме того, у нас есть простая и понятная структура классов: общие для всех машин поля вынесены в один класс. Если, например, у грузовиков есть какие-то специфичные поля, которых нет у остальных машин, их можно объявить в классе', 0);
+
+insert into posts(id, is_active, moderation_status, moderator_id, user_id, time, title, text, view_count)
+VALUES(18,  1, 'ACCEPTED', 1, 1, '2021-02-17 10:11:17', 'Профессия Токарь', 'Многие люди упоминали, почему возникает эта проблема, но не предлагали ее исправить. Все, что мне нужно было сделать, это зайти в свой файл POM для моего проекта и добавить тег <version>', 0);
+
+insert into posts(id, is_active, moderation_status, moderator_id, user_id, time, title, text, view_count)
+VALUES(19,  1, 'ACCEPTED', 1, 1, '2021-02-17 11:11:17', 'Профессия Слесарь', 'Каждая задача-игра — это проект: большая задача с двумя десятками подзадач. В процессе написания игры вам нужно будет последовательно выполнить их. Когда последняя подзадача будет сделана, ваша игра готова.', 0);
+
+insert into posts(id, is_active, moderation_status, moderator_id, user_id, time, title, text, view_count)
+VALUES(20,  1, 'ACCEPTED', 7, 3, '2021-02-17 12:11:20', 'Профессия Фрезеровщик', 'У всех автомобилей есть какое-то общее поведение', 0);
+
+insert into posts(id, is_active, moderation_status, moderator_id, user_id, time, title, text, view_count)
+VALUES(21,  1, 'ACCEPTED', 1, 1, '2021-02-17 13:11:17', 'Профессия Сталевар', 'машинного обучения и нейросетям, сможете', 0);
+
+
+
 delete from post_votes;
 insert into post_votes(user_id, post_id, time, value)
 VALUES (2, 1, '2018-01-01 01:10:00', 1);
@@ -80,6 +100,10 @@ insert into post_votes(user_id, post_id, time, value)
 VALUES (6, 1, '2018-04-14 04:50:00', 1);
 insert into post_votes(user_id, post_id, time, value)
 VALUES (1, 4, '2018-05-15 05:55:00', 0);
+insert into post_votes(user_id, post_id, time, value)
+VALUES (2, 16, '2021-12-26 12:11:17', 1);
+insert into post_votes(user_id, post_id, time, value)
+VALUES (2, 17, '2021-12-27 23:11:17', 1);
 
 insert into post_votes(user_id, post_id, time, value)
 VALUES (4, 5, '2018-06-02 11:11:00', 1);
@@ -162,17 +186,29 @@ insert into tags2posts(post_id, tag_id)
 VALUES (12, 2);
 insert into tags2posts(post_id, tag_id)
 VALUES (13, 2);
+insert into tags2posts(post_id, tag_id)
+VALUES (18, 2);
 
 
 insert into tags2posts(post_id, tag_id)
 VALUES (6, 1);
 insert into tags2posts(post_id, tag_id)
 VALUES (15, 1);
+insert into tags2posts(post_id, tag_id)
+VALUES (16, 1);
+insert into tags2posts(post_id, tag_id)
+VALUES (17, 1);
+insert into tags2posts(post_id, tag_id)
+VALUES (19, 1);
+insert into tags2posts(post_id, tag_id)
+VALUES (20, 1);
 
 insert into tags2posts(post_id, tag_id)
 VALUES (10, 3);
 insert into tags2posts(post_id, tag_id)
 VALUES (14, 3);
+insert into tags2posts(post_id, tag_id)
+VALUES (21, 3);
 
 delete  from captcha_codes;
 insert into captcha_codes(time, code, secret_code)

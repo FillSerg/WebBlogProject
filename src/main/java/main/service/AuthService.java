@@ -80,7 +80,6 @@ public class AuthService {
     }
 
     private void deleteOldCaptcha() {
-        ;
         Date date = new Date(new Date().getTime() - (long) captchaDeleteHours * 60 * 60 * 1000);
         List<CaptchaCode> captchaCodes = captchaCodesRepository.findAll();
         for (CaptchaCode captcha : captchaCodes
@@ -111,7 +110,6 @@ public class AuthService {
                     .encode(registerRequest.getPassword()));*/
         user.setPassword(registerRequest.getPassword());
         user.setCode(registerRequest.getCaptchaSecret());
-
         userRepository.save(user);
         return ResponseEntity.ok(new RegisterResponse(true));
     }
@@ -156,7 +154,7 @@ public class AuthService {
             registerErrorResponse.setCaptcha("Код с картинки указан не верно");
             isValidate = false;
         }
-        if (!isValidate){
+        if (!isValidate) {
             return registerErrorResponse;
         }
         return new RegisterResponse(true);
